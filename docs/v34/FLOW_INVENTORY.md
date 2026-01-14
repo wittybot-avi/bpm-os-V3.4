@@ -7,6 +7,13 @@ V3.4 converts “stage simulations” into “flow-level MES behavior” using O
 - Responses are served by in-app handlers (dev-time simulation)
 - Backend team later replaces the /api handlers with real services, while UI stays stable
 
+## Infrastructure Status
+| Component | Status | Notes |
+|:---|:---|:---|
+| Fetch Interceptor | **WIRED** | window.fetch patched in apiHarness.ts |
+| Flow Logic Router | **WIRED** | flowHandlers.ts manages routing |
+| Local Storage DB | **WIRED** | Simple persistence for pilot flow instances |
+
 ## Flow List
 
 | Flow ID | SOP Stage | Screen/Area | Primary Roles | State Model | API Endpoints (planned) | Status |

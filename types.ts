@@ -71,3 +71,6 @@ export type NavView =
   | 'production_line'
   | 'system_logs'
   | 'system_reports';
+
+// Export shared flow contracts
+export * from './types/flowContracts';

@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { initApiHarness } from './services/apiHarness';
+
+// V3.4: Establish API Interceptor before React renders
+initApiHarness();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

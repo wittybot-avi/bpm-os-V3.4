@@ -1,5 +1,6 @@
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+
+import React, { ErrorInfo, ReactNode } from 'react';
 import { ShieldAlert, RefreshCw, LayoutDashboard, FileText, Copy, Terminal } from 'lucide-react';
 import { NavView, PATCH_ID } from '../types';
 
@@ -14,7 +15,7 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
-// Fix: Explicitly extend React.Component to resolve TS property access issues for props and setState
+// Fix: Using React.Component explicitly ensures reliable type inheritance for props and setState in this environment
 class ErrorBoundary extends React.Component<Props, State> {
   public state: State = {
     hasError: false,
@@ -26,7 +27,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error, errorInfo: null };
   }
 
-  // Fix: setState is now correctly recognized as a member of React.Component
+  // Fix: Accessing setState through inheritance from React.Component
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("BPM-OS Runtime Error:", error, errorInfo);
     this.setState({ errorInfo });
@@ -36,33 +37,40 @@ class ErrorBoundary extends React.Component<Props, State> {
     window.location.reload();
   };
 
-  // Fix: props and setState are now correctly recognized in arrow function methods
+  // Fix: Arrow function allows correct 'this' context to access inherited props and setState
   private handleDashboard = () => {
-    if (this.props.onNavigate) {
-      this.props.onNavigate('dashboard');
+    const { onNavigate } = this.props;
+    if (onNavigate) {
+      onNavigate('dashboard');
       this.setState({ hasError: false, error: null, errorInfo: null });
     } else {
       window.location.reload();
     }
   };
 
-  // Fix: props and setState are now correctly recognized in arrow function methods
+  // Fix: Arrow function allows correct 'this' context to access inherited props and setState
   private handleDocs = () => {
-    if (this.props.onNavigate) {
-      this.props.onNavigate('documentation');
+    const { onNavigate } = this.props;
+    if (onNavigate) {
+      onNavigate('documentation');
       this.setState({ hasError: false, error: null, errorInfo: null });
     }
   };
 
   private copyErrorDetails = () => {
-    const details = `BPM-OS ERROR REPORT\nPatch: ${PATCH_ID}\nTime: ${new Date().toISOString()}\n\nMessage: ${this.state.error?.message}\n\nStack:\n${this.state.errorInfo?.componentStack || this.state.error?.stack || 'No stack trace available.'}`;
+    const { error, errorInfo } = this.state;
+    const details = `BPM-OS ERROR REPORT\nPatch: ${PATCH_ID}\nTime: ${new Date().toISOString()}\n\nMessage: ${error?.message}\n\nStack:\n${errorInfo?.componentStack || error?.stack || 'No stack trace available.'}`;
     navigator.clipboard.writeText(details).then(() => {
         alert("Error details copied to clipboard.");
     });
   };
 
   public render() {
-    if (this.state.hasError) {
+    const { hasError, error } = this.state;
+    // Fix: children is accessed from this.props which is inherited from React.Component
+    const { children } = this.props;
+
+    if (hasError) {
       return (
         <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-900 p-6">
           <div className="max-w-xl w-full bg-white shadow-2xl rounded-xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-300">
@@ -121,7 +129,7 @@ class ErrorBoundary extends React.Component<Props, State> {
                   </button>
                </div>
                <div className="bg-slate-900 rounded p-3 text-xs font-mono text-red-300 overflow-auto max-h-32 border border-slate-700 shadow-inner">
-                  {this.state.error?.toString()}
+                  {error?.toString()}
                </div>
                <div className="mt-2 text-[10px] text-slate-400 text-right">
                   Build: {PATCH_ID}
@@ -133,8 +141,8 @@ class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    // Fix: this.props.children is now correctly recognized as a member of the component
-    return this.props.children;
+    // Fix: Return children from inherited props
+    return children;
   }
 }
 
