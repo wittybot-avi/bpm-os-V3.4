@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-FND-BP-05** | Foundation | Route apiFetch("/api/*") to in-app simulated router (health endpoint available) | **STABLE** | No UI wiring; no global fetch patching; AI Studio safe | 2026-01-27 12:45 (IST) |
 | **V34-FND-BP-04** | Foundation | Add in-app API router scaffold (types + dispatch + 1 health route) | **STABLE** | No UI wiring, no global fetch patching | 2026-01-27 12:10 (IST) |
 | **V34-FND-BP-03** | Foundation | Add Flow Registry Seed (typed list, not yet rendered) | **STABLE** | Data-only; no runtime change | 2026-01-27 11:45 (IST) |
 | **V34-HOTFIX-BP-00** | Hotfix | Prevent crash by removing window.fetch monkey-patch; introduce apiFetch wrapper | **STABLE** | AI Studio sandbox blocks assigning window.fetch | 2026-01-27 11:30 (IST) |

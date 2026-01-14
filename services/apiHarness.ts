@@ -3,9 +3,10 @@
  * Provides an exported apiFetch wrapper instead of patching window.fetch.
  * Required for compatibility with AI Studio sandbox.
  * @hotfix V34-HOTFIX-BP-00
+ * @foundation V34-FND-BP-05
  */
 
-import { handleFlowRequest } from './flowHandlers';
+import { simulateFetch } from '../sim/api/apiFetchAdapter';
 
 export type ApiFetch = typeof fetch;
 
@@ -16,19 +17,18 @@ const nativeFetch: ApiFetch = (...args) => fetch(...args);
  * Use this instead of global fetch for MES Pilot flow calls.
  */
 export const apiFetch: ApiFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-  const url = typeof input === 'string' ? input : 
-              input instanceof URL ? input.toString() : 
-              input.url;
+  const urlStr = typeof input === 'string' ? input : 
+                 input instanceof URL ? input.toString() : 
+                 input.url;
 
-  // Intercept only /api flows requests
-  if (url.includes('/api/flows/')) {
-    console.debug(`[BPM-API] Routing to simulator: ${init?.method || 'GET'} ${url}`);
-    // Simulate network latency for pilot feel
-    await new Promise(resolve => setTimeout(resolve, 400 + Math.random() * 400));
-    return handleFlowRequest(url, init);
+  const url = new URL(urlStr, window.location.origin);
+
+  // Route any /api path to the internal simulation router
+  if (url.pathname.startsWith('/api/')) {
+    return simulateFetch(input, init);
   }
 
-  // Pass through all other requests
+  // Pass through all other requests to native fetch
   return nativeFetch(input, init);
 };
 
