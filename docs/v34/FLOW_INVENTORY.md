@@ -27,6 +27,7 @@ V3.4 converts “stage simulations” into “flow-level MES behavior” using O
 ## Infrastructure Status (Detail)
 - Router: **WIRED**
 - apiFetch Adapter: **WIRED**
+- In-memory store: **WIRED** (reset on reload)
 - /api/health: **WIRED**
 - /api/flows/registry: **WIRED**
 - /api/flows/{sku,batch,inbound,final-qa,dispatch}: **WIRED** (static skeleton)

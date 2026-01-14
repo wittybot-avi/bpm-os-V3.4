@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-FND-BP-10** | Foundation | Add in-memory API store (flows map) resettable on reload | **STABLE** | PLAN: Phase A Step 6 (V34-FND-BP-06). Store introduced; endpoints still static; no UI wiring. | 2026-01-27 15:15 (IST) |
 | **V34-FND-BP-09** | Foundation | Add /api/flows/* static skeleton endpoints (Option-B alignment) | **STABLE** | PLAN: Phase A Step 5 (V34-FND-BP-05). Static JSON only; no UI wiring. | 2026-01-27 14:45 (IST) |
 | **V34-FND-BP-08** | Foundation | Add Device Layout Resolver + hook (mobile/tablet/desktop) | **STABLE** | PLAN: Phase A Step 4 (V34-FND-BP-04). Not used anywhere yet. Zero runtime change. | 2026-01-27 14:15 (IST) |
 | **V34-FND-BP-07** | Foundation | Add Flow UI Harness shells (FlowShell/FlowStep/FlowFooter) | **STABLE** | PLAN: Phase A Step 3 (V34-FND-BP-03). Not used anywhere yet. Zero runtime change. | 2026-01-27 13:45 (IST) |
