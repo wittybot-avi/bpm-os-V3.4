@@ -24,6 +24,13 @@ V3.4 converts “stage simulations” into “flow-level MES behavior” using O
 | FLOW-004 | S8/S9 | Final Pack QA → Trigger Battery ID (system) | QA, Supervisor (S8) + System (S9) | Pending → Approved/Rejected | /api/flows/final-qa/* | PLANNED |
 | FLOW-005 | S13/S14 | Dispatch Authorization → Execution → Custody Transfer | SCM, Finance, Logistics | Draft → Approved → Dispatched → Delivered → Closed | /api/flows/dispatch/* | PLANNED |
 
+## Infrastructure Status (Detail)
+- Router: **WIRED**
+- apiFetch Adapter: **WIRED**
+- /api/health: **WIRED**
+- /api/flows/registry: **WIRED**
+- /api/flows/{sku,batch,inbound,final-qa,dispatch}: **WIRED** (static skeleton)
+
 ## Guardrails
 - One flow change per patch
 - No screen-wide refactors
