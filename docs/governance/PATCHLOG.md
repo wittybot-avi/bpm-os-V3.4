@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S1-FLOW-001-PP-03** | Product Patch | Add S1 SKU Flow Step Wizard UI (local-only; no API) | **STABLE** | Wizard hidden by default; existing S1 UI preserved. No API wiring yet. | 2026-01-27 16:45 (IST) |
 | **V34-S1-FLOW-001-FP-02** | Flow Policy | Add RBAC action policy for SKU flow by role + state | **STABLE** | Pure policy only; no UI/API wiring yet. | 2026-01-27 16:15 (IST) |
 | **V34-S1-FLOW-001-BP-01** | Flow Contract | Define S1 SKU flow state machine + API payload contracts (no UI wiring) | **STABLE** | Phase B begins. Contracts only. | 2026-01-27 15:45 (IST) |
 | **V34-FND-BP-10** | Foundation | Add in-memory API store (flows map) resettable on reload | **STABLE** | PLAN: Phase A Step 6 (V34-FND-BP-06). Store introduced; endpoints still static; no UI wiring. | 2026-01-27 15:15 (IST) |
