@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-FND-BP-06** | Foundation | Add GET /api/flows/registry route backed by FLOW_REGISTRY_SEED | **STABLE** | No UI wiring; still uses apiFetch wrapper only | 2026-01-27 13:10 (IST) |
 | **V34-FND-BP-05** | Foundation | Route apiFetch("/api/*") to in-app simulated router (health endpoint available) | **STABLE** | No UI wiring; no global fetch patching; AI Studio safe | 2026-01-27 12:45 (IST) |
 | **V34-FND-BP-04** | Foundation | Add in-app API router scaffold (types + dispatch + 1 health route) | **STABLE** | No UI wiring, no global fetch patching | 2026-01-27 12:10 (IST) |
 | **V34-FND-BP-03** | Foundation | Add Flow Registry Seed (typed list, not yet rendered) | **STABLE** | Data-only; no runtime change | 2026-01-27 11:45 (IST) |

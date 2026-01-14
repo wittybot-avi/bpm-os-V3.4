@@ -1,10 +1,12 @@
 /**
  * Simulated API Route Registry
- * Initial scaffold with health check endpoint.
+ * Initial scaffold with health check and flow registry endpoints.
  * @foundation V34-FND-BP-04
+ * @foundation V34-FND-BP-06
  */
 
 import { route, RouteDef } from "./apiRouter";
+import { getFlowRegistry } from "./handlers/flowRegistryHandler";
 
 export const SIM_API_ROUTES: RouteDef[] = [
   /**
@@ -22,4 +24,10 @@ export const SIM_API_ROUTES: RouteDef[] = [
       }
     }
   })),
+
+  /**
+   * GET /api/flows/registry
+   * Returns the list of planned MES Pilot flows.
+   */
+  route("GET", "EXACT", "/api/flows/registry", getFlowRegistry),
 ];
