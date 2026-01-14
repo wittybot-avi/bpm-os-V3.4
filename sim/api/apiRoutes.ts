@@ -7,12 +7,12 @@
  * @foundation V34-S1-FLOW-001-PP-05
  * @foundation V34-S2-FLOW-002-PP-03
  * @foundation V34-S3-FLOW-003-PP-04
+ * @foundation V34-S9-FLOW-004-PP-04
  */
 
 import { route, RouteDef } from "./apiRouter";
 import { getFlowRegistry } from "./handlers/flowRegistryHandler";
 import { 
-  getFinalQaFlowStatic, 
   getDispatchFlowStatic 
 } from "./handlers/flowsStaticSkeleton";
 import { 
@@ -42,6 +42,15 @@ import {
   getInboundFlow,
   listInboundFlows
 } from "./handlers/inboundFlowHandlers";
+import {
+  createFinalQa,
+  submitFinalQa,
+  approveFinalQa,
+  rejectFinalQa,
+  reworkFinalQa,
+  getFinalQa,
+  listFinalQa
+} from "./handlers/finalQaFlowHandlers";
 
 export const SIM_API_ROUTES: RouteDef[] = [
   /**
@@ -100,8 +109,18 @@ export const SIM_API_ROUTES: RouteDef[] = [
   route("GET", "EXACT", "/api/flows/inbound/list", listInboundFlows),
 
   /**
+   * Final QA Flow (FLOW-004) - Live Simulated Handlers
+   */
+  route("POST", "EXACT", "/api/flows/final-qa/create", createFinalQa),
+  route("POST", "EXACT", "/api/flows/final-qa/submit", submitFinalQa),
+  route("POST", "EXACT", "/api/flows/final-qa/approve", approveFinalQa),
+  route("POST", "EXACT", "/api/flows/final-qa/reject", rejectFinalQa),
+  route("POST", "EXACT", "/api/flows/final-qa/rework", reworkFinalQa),
+  route("GET", "EXACT", "/api/flows/final-qa/get", getFinalQa),
+  route("GET", "EXACT", "/api/flows/final-qa/list", listFinalQa),
+
+  /**
    * Static Flow Skeletons (V34 Phase A)
    */
-  route("GET", "EXACT", "/api/flows/final-qa", getFinalQaFlowStatic),
   route("GET", "EXACT", "/api/flows/dispatch", getDispatchFlowStatic),
 ];
