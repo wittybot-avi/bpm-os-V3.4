@@ -1,6 +1,4 @@
-
-
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { ShieldAlert, RefreshCw, LayoutDashboard, FileText, Copy, Terminal } from 'lucide-react';
 import { NavView, PATCH_ID } from '../types';
 
@@ -15,8 +13,8 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
-// Fix: Using React.Component explicitly ensures reliable type inheritance for props and setState in this environment
-class ErrorBoundary extends React.Component<Props, State> {
+// Fix: Explicitly importing and extending Component ensures properties like props and setState are correctly recognized.
+class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
     error: null,
@@ -27,7 +25,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error, errorInfo: null };
   }
 
-  // Fix: Accessing setState through inheritance from React.Component
+  // Fix: Accessing setState through inheritance from Component.
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("BPM-OS Runtime Error:", error, errorInfo);
     this.setState({ errorInfo });
@@ -37,7 +35,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     window.location.reload();
   };
 
-  // Fix: Arrow function allows correct 'this' context to access inherited props and setState
+  // Fix: handleDashboard correctly accesses inherited props and setState from Component.
   private handleDashboard = () => {
     const { onNavigate } = this.props;
     if (onNavigate) {
@@ -48,7 +46,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     }
   };
 
-  // Fix: Arrow function allows correct 'this' context to access inherited props and setState
+  // Fix: handleDocs correctly accesses inherited props and setState from Component.
   private handleDocs = () => {
     const { onNavigate } = this.props;
     if (onNavigate) {
@@ -67,7 +65,7 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   public render() {
     const { hasError, error } = this.state;
-    // Fix: children is accessed from this.props which is inherited from React.Component
+    // Fix: render method correctly accesses children from this.props which is inherited from Component.
     const { children } = this.props;
 
     if (hasError) {
@@ -141,7 +139,7 @@ class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    // Fix: Return children from inherited props
+    // Fix: render method correctly returns children from inherited props.
     return children;
   }
 }

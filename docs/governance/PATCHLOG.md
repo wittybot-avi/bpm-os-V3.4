@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-FND-BP-03** | Foundation | Add Flow Registry Seed (typed list, not yet rendered) | **STABLE** | Data-only; no runtime change | 2026-01-27 11:45 (IST) |
 | **V34-HOTFIX-BP-00** | Hotfix | Prevent crash by removing window.fetch monkey-patch; introduce apiFetch wrapper | **STABLE** | AI Studio sandbox blocks assigning window.fetch | 2026-01-27 11:30 (IST) |
 | **V34-API-BP-03** | Foundation | Option-B API Harness Scaffolding | **STABLE** | Global fetch patched; flowHandlers initialized | 2026-01-27 11:15 (IST) |
 | **V34-FND-BP-02** | Foundation | Add Flow Contract Types (shared flow + API envelope types) | **STABLE** | Types-only; no runtime change | 2026-01-27 10:45 (IST) |
