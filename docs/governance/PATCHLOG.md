@@ -1,5 +1,11 @@
 # BPM-OS Frontend PATCHLOG
 
+## V3.4 Active
+
+| Patch ID | Patch Type | Intent | Status | Notes | Date |
+|:---|:---|:---|:---|:---|:---|
+| **V34-FND-BP-01** | Foundation | Add Flow Inventory registry (docs only) + bump version to V3.4 | **STABLE** | No UI/runtime change | 2026-01-27 10:00 (IST) |
+
 ## V3.1-EXT Archive (Frozen)
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
