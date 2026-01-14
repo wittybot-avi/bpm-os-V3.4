@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S9-FLOW-004-DOC-05** | Documentation | Document Final QA flow for backend + ops | **STABLE** | Detailed technical spec for FLOW-004. | 2026-01-28 00:45 (IST) |
 | **V34-S9-FLOW-004-PP-04** | Product Patch | Wire Final QA wizard to /api/flows/final-qa endpoints | **STABLE** | Integrated simulated API for FQA lifecycle. | 2026-01-28 00:30 (IST) |
 | **V34-S9-FLOW-004-PP-03** | Product Patch | Add Final QA wizard UI using FlowShell | **STABLE** | Local-only wizard for Final QA (S9) lifecycle. Includes ID generation simulation. | 2026-01-28 00:15 (IST) |
 | **V34-S9-FLOW-004-FP-02** | Flow Policy | Define Final QA allowed actions by role + state | **STABLE** | Logic only; no UI change for FLOW-004. | 2026-01-27 23:45 (IST) |
