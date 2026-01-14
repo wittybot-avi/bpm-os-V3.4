@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S9-FLOW-004-PP-03** | Product Patch | Add Final QA wizard UI using FlowShell | **STABLE** | Local-only wizard for Final QA (S9) lifecycle. Includes ID generation simulation. | 2026-01-28 00:15 (IST) |
 | **V34-S9-FLOW-004-FP-02** | Flow Policy | Define Final QA allowed actions by role + state | **STABLE** | Logic only; no UI change for FLOW-004. | 2026-01-27 23:45 (IST) |
 | **V34-S9-FLOW-004-BP-01** | Build-Phase | Define Final QA flow states, checklist model, and API contracts | **STABLE** | Build-phase only; no UI wiring for FLOW-004. | 2026-01-27 23:30 (IST) |
 | **V34-S3-FLOW-003-DOC-05** | Documentation | Document inbound + QC flow for ops and backend teams | **STABLE** | Technical spec for FLOW-003 including state model and API. | 2026-01-27 23:00 (IST) |
@@ -25,7 +26,7 @@
 | **V34-FND-BP-10** | Foundation | Add in-memory API store (flows map) resettable on reload | **STABLE** | PLAN: Phase A Step 6 (V34-FND-BP-06). Store introduced; endpoints still static; no UI wiring. | 2026-01-27 15:15 (IST) |
 | **V34-FND-BP-09** | Foundation | Add /api/flows/* static skeleton endpoints (Option-B alignment) | **STABLE** | PLAN: Phase A Step 5 (V34-FND-BP-05). Static JSON only; no UI wiring. | 2026-01-27 14:45 (IST) |
 | **V34-FND-BP-08** | Foundation | Add Device Layout Resolver + hook (mobile/tablet/desktop) | **STABLE** | PLAN: Phase A Step 4 (V34-FND-BP-04). Not used anywhere yet. Zero runtime change. | 2026-01-27 14:15 (IST) |
-| **V34-FND-BP-07** | Foundation | Add Flow UI Harness shells (FlowShell/FlowStep/FlowFooter) | **STABLE** | PLAN: Phase A Step 3 (V34-FND-BP-03). Not used anywhere yet. Zero runtime change. | 2026-01-27 13:45 (IST) |
+| **V34-FND-BP-08** | Foundation | Add Flow UI Harness shells (FlowShell/FlowStep/FlowFooter) | **STABLE** | PLAN: Phase A Step 3 (V34-FND-BP-03). Not used anywhere yet. Zero runtime change. | 2026-01-27 13:45 (IST) |
 | **V34-FND-BP-06** | Foundation | Add GET /api/flows/registry route backed by FLOW_REGISTRY_SEED | **STABLE** | No UI wiring; still uses apiFetch wrapper only | 2026-01-27 13:10 (IST) |
 | **V34-FND-BP-05** | Foundation | Route apiFetch("/api/*") to in-app simulated router (health endpoint available) | **STABLE** | No UI wiring; no global fetch patching; AI Studio safe | 2026-01-27 12:45 (IST) |
 | **V34-FND-BP-04** | Foundation | Add in-app API router scaffold (types + dispatch + 1 health route) | **STABLE** | No UI wiring, no global fetch patching | 2026-01-27 12:10 (IST) |

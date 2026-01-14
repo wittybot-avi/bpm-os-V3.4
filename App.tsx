@@ -15,7 +15,8 @@ import { ModuleAssembly } from './components/ModuleAssembly';
 import { ModuleQA } from './components/ModuleQA';
 import { PackAssembly } from './components/PackAssembly';
 import { PackReview } from './components/PackReview';
-import { BatteryRegistry } from './components/BatteryRegistry';
+// Updated S9 Wrapper
+import { S9FinalQaScreen } from './screens/s9/S9FinalQaScreen';
 import { BMSProvisioning } from './components/BMSProvisioning';
 import { FinishedGoods } from './components/FinishedGoods';
 import { PackagingAggregation } from './components/PackagingAggregation';
@@ -79,7 +80,7 @@ const App: React.FC = () => {
           {currentView === 'module_qa' && <ModuleQA onNavigate={setCurrentView} />}
           {currentView === 'pack_assembly' && <PackAssembly onNavigate={setCurrentView} />}
           {currentView === 'pack_review' && <PackReview onNavigate={setCurrentView} />}
-          {currentView === 'battery_registry' && <BatteryRegistry onNavigate={setCurrentView} />}
+          {currentView === 'battery_registry' && <S9FinalQaScreen onNavigate={setCurrentView} />}
           {currentView === 'bms_provisioning' && <BMSProvisioning onNavigate={setCurrentView} />}
           {currentView === 'finished_goods' && <FinishedGoods onNavigate={setCurrentView} />}
           {currentView === 'packaging_aggregation' && <PackagingAggregation />}
