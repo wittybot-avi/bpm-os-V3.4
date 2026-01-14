@@ -1,3 +1,4 @@
+
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { ShieldAlert, RefreshCw, LayoutDashboard, FileText, Copy, Terminal } from 'lucide-react';
 import { NavView, PATCH_ID } from '../types';
@@ -13,7 +14,8 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
-class ErrorBoundary extends Component<Props, State> {
+// Fix: Explicitly extend React.Component to resolve TS property access issues for props and setState
+class ErrorBoundary extends React.Component<Props, State> {
   public state: State = {
     hasError: false,
     error: null,
@@ -24,6 +26,7 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error, errorInfo: null };
   }
 
+  // Fix: setState is now correctly recognized as a member of React.Component
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("BPM-OS Runtime Error:", error, errorInfo);
     this.setState({ errorInfo });
@@ -33,6 +36,7 @@ class ErrorBoundary extends Component<Props, State> {
     window.location.reload();
   };
 
+  // Fix: props and setState are now correctly recognized in arrow function methods
   private handleDashboard = () => {
     if (this.props.onNavigate) {
       this.props.onNavigate('dashboard');
@@ -42,6 +46,7 @@ class ErrorBoundary extends Component<Props, State> {
     }
   };
 
+  // Fix: props and setState are now correctly recognized in arrow function methods
   private handleDocs = () => {
     if (this.props.onNavigate) {
       this.props.onNavigate('documentation');
@@ -128,6 +133,7 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
+    // Fix: this.props.children is now correctly recognized as a member of the component
     return this.props.children;
   }
 }
