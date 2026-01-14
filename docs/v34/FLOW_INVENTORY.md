@@ -18,7 +18,7 @@ V3.4 converts “stage simulations” into “flow-level MES behavior” using O
 
 | Flow ID | SOP Stage | Screen/Area | Primary Roles | State Model | API Endpoints (planned) | Status |
 |---|---|---|---|---|---|---|
-| FLOW-001 | S1 | SKU Creation & Blueprint Approval | Engineering, Supervisor | Draft → Review → Approved → Active | /api/flows/sku/* | PLANNED |
+| FLOW-001 | S1 | SKU Creation & Blueprint Approval | Engineering, Supervisor | Draft → Review → Approved → Active | /api/flows/sku/* | **WIRED** |
 | FLOW-002 | S4 | Batch / Work Order Creation | Planner, Supervisor | Draft → Approved → InProgress → Closed | /api/flows/batch/* | PLANNED |
 | FLOW-003 | S3 | Inbound Receipt + Serialization + QC | Stores, QA, Supervisor | Received → QCPending → Released/Blocked/Scrapped | /api/flows/inbound/* | PLANNED |
 | FLOW-004 | S8/S9 | Final Pack QA → Trigger Battery ID (system) | QA, Supervisor (S8) + System (S9) | Pending → Approved/Rejected | /api/flows/final-qa/* | PLANNED |
@@ -37,3 +37,6 @@ V3.4 converts “stage simulations” into “flow-level MES behavior” using O
 - No screen-wide refactors
 - Compliance module remains read-only
 - If a flow is not wired, show explicit “PLANNED” status in that flow area; do not crash
+
+## Flow Status Notes
+- **FLOW-001**: Fully implemented in UI wizard + in-app API + in-memory store. End-to-end documentation available in `docs/v34/flows/FLOW-001-SKU.md`.
