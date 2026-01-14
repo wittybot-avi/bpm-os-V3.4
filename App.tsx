@@ -8,7 +8,8 @@ import { ExceptionsView } from './components/ExceptionsView';
 import { SystemSetup } from './components/SystemSetup';
 import { SKUBlueprint } from './components/SKUBlueprint';
 import { Procurement } from './components/Procurement';
-import { InboundReceipt } from './components/InboundReceipt';
+// Import the new S3 screen wrapper
+import { S3InboundScreen } from './screens/s3/S3InboundScreen';
 import { BatchPlanning } from './components/BatchPlanning';
 import { ModuleAssembly } from './components/ModuleAssembly';
 import { ModuleQA } from './components/ModuleQA';
@@ -72,7 +73,7 @@ const App: React.FC = () => {
           {currentView === 'system_setup' && <SystemSetup onNavigate={setCurrentView} />}
           {currentView === 'sku_blueprint' && <SKUBlueprint onNavigate={setCurrentView} />}
           {currentView === 'procurement' && <Procurement onNavigate={setCurrentView} />}
-          {currentView === 'inbound_receipt' && <InboundReceipt onNavigate={setCurrentView} />}
+          {currentView === 'inbound_receipt' && <S3InboundScreen onNavigate={setCurrentView} />}
           {currentView === 'batch_planning' && <BatchPlanning onNavigate={setCurrentView} />}
           {currentView === 'module_assembly' && <ModuleAssembly onNavigate={setCurrentView} />}
           {currentView === 'module_qa' && <ModuleQA onNavigate={setCurrentView} />}
