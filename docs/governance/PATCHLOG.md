@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S2-FLOW-002-PP-02** | Product Patch | Add Batch Flow Wizard UI using FlowShell | **STABLE** | Local state only. No API yet. Wizard hidden by default. | 2026-01-27 19:45 (IST) |
 | **V34-S2-FLOW-002-BP-01** | Build-Phase | Define Batch flow states, data model, and API payload contracts | **STABLE** | Contracts only; no UI wiring or handlers. | 2026-01-27 19:15 (IST) |
 | **V34-S1-FLOW-001-DOC-06** | Documentation | Document FLOW-001 (S1 SKU) — states, RBAC, wizard, API endpoints, handover notes | **STABLE** | No runtime change. Completes Flow-001 pilot. | 2026-01-27 18:45 (IST) |
 | **V34-S1-FLOW-001-PP-06** | Product Patch | SKU Flow Instance List & Load | **STABLE** | Integrated sim API flow list into S1 screen; added "Resume" support in Wizard. | 2026-01-27 18:30 (IST) |
