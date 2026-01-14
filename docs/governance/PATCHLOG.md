@@ -4,7 +4,9 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S3-FLOW-003-DOC-05** | Documentation | Document inbound + QC flow for ops and backend teams | **STABLE** | Technical spec for FLOW-003 including state model and API. | 2026-01-27 23:00 (IST) |
 | **V34-S3-FLOW-003-PP-04** | Product Patch | Wire inbound wizard to /api/flows/inbound endpoints | **STABLE** | Integrated sim API for full material receipt lifecycle. | 2026-01-27 22:00 (IST) |
+| **V34-S3-FLOW-003-PP-03** | Product Patch | Make inbound wizard tablet-friendly (warehouse usage) | **STABLE** | Implemented responsive layouts and touch optimizations for FLOW-003. | 2026-01-27 22:30 (IST) |
 | **V34-S3-FLOW-003-PP-02** | Product Patch | Add inbound flow wizard UI using FlowShell | **STABLE** | Local-only wizard for material receipt lifecycle. | 2026-01-27 21:30 (IST) |
 | **V34-S3-FLOW-003-BP-01** | Build-Phase | Define Inbound flow states, data model, and API payload contracts | **STABLE** | Contracts only for FLOW-003; no UI wiring. | 2026-01-27 21:00 (IST) |
 | **V34-S2-FLOW-002-DOC-04** | Documentation | Document Batch / Work Order flow for backend & ops handover | **STABLE** | Technical spec for FLOW-002 including state model and API. | 2026-01-27 20:30 (IST) |

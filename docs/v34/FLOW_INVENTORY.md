@@ -20,7 +20,7 @@ V3.4 converts “stage simulations” into “flow-level MES behavior” using O
 |---|---|---|---|---|---|---|
 | FLOW-001 | S1 | SKU Creation & Blueprint Approval | Engineering, Supervisor | Draft → Review → Approved → Active | /api/flows/sku/* | **WIRED** |
 | FLOW-002 | S4 | Batch / Work Order Creation | Planner, Supervisor | Draft → Approved → InProgress → Closed | /api/flows/batch/* | **WIRED** |
-| FLOW-003 | S3 | Inbound Receipt + Serialization + QC | Stores, QA, Supervisor | Received → QCPending → Released/Blocked/Scrapped | /api/flows/inbound/* | PLANNED |
+| FLOW-003 | S3 | Inbound Receipt + Serialization + QC | Stores, QA, Supervisor | Received → QCPending → Released/Blocked/Scrapped | /api/flows/inbound/* | **WIRED** |
 | FLOW-004 | S8/S9 | Final Pack QA → Trigger Battery ID (system) | QA, Supervisor (S8) + System (S9) | Pending → Approved/Rejected | /api/flows/final-qa/* | PLANNED |
 | FLOW-005 | S13/S14 | Dispatch Authorization → Execution → Custody Transfer | SCM, Finance, Logistics | Draft → Approved → Dispatched → Delivered → Closed | /api/flows/dispatch/* | PLANNED |
 
@@ -41,3 +41,4 @@ V3.4 converts “stage simulations” into “flow-level MES behavior” using O
 ## Flow Status Notes
 - **FLOW-001**: Fully implemented in UI wizard + in-app API + in-memory store. End-to-end documentation available in `docs/v34/flows/FLOW-001-SKU.md`.
 - **FLOW-002**: Fully implemented in UI wizard + in-app API + in-memory store. Documentation available in `docs/v34/flows/FLOW-002-BATCH.md`.
+- **FLOW-003**: Fully implemented in UI wizard + in-app API + in-memory store. Documentation available in `docs/v34/flows/FLOW-003-INBOUND.md`.
