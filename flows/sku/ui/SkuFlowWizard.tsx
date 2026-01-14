@@ -2,7 +2,8 @@
  * SKU Flow Wizard (FLOW-001)
  * A standardized step-wizard for SKU creation lifecycle.
  * Uses local state for Phase B validation.
- * @foundation V34-S1-FLOW-001-PP-03
+ * Device-aware layout implemented via useDeviceLayout.
+ * @foundation V34-S1-FLOW-001-PP-04
  */
 
 import React, { useState } from 'react';
@@ -16,7 +17,12 @@ import {
   AlertTriangle, 
   ShieldCheck,
   XCircle,
-  FileText
+  FileText,
+  ChevronDown,
+  ChevronUp,
+  Monitor,
+  Tablet,
+  Smartphone
 } from 'lucide-react';
 import { FlowShell, FlowStep, FlowFooter } from '../../../components/flow';
 import { 
@@ -33,15 +39,21 @@ import {
   createDefaultWizardModel, 
   resolveStepFromState 
 } from './skuFlowWizardModel';
+import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 
 interface SkuFlowWizardProps {
   onExit: () => void;
 }
 
 export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
+  const layout = useDeviceLayout();
   const [model, setModel] = useState<WizardModel>(createDefaultWizardModel());
+  const [showSummaryDetails, setShowSummaryDetails] = useState(false);
 
   const roles: SkuFlowRole[] = ["Maker", "Checker", "Approver"];
+  const isMobile = layout === 'mobile';
+  const isTablet = layout === 'tablet';
+  const isDesktop = layout === 'desktop';
 
   const handleUpdateDraft = (field: keyof SkuDraft, value: any) => {
     setModel(m => ({
@@ -85,8 +97,26 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
     setModel(createDefaultWizardModel());
   };
 
-  // Role Switcher for Demo
-  const RoleSwitcher = (
+  // Device Indicator (Debug Only)
+  const DeviceIndicator = (
+    <div className="flex items-center gap-1.5 text-[9px] font-mono text-slate-400 mr-4 select-none opacity-50 hover:opacity-100 transition-opacity">
+      {isDesktop && <Monitor size={10} />}
+      {isTablet && <Tablet size={10} />}
+      {isMobile && <Smartphone size={10} />}
+      <span className="uppercase">{layout}</span>
+    </div>
+  );
+
+  // Role Switcher
+  const RoleSwitcher = isMobile ? (
+    <select 
+      value={model.role} 
+      onChange={(e) => handleRoleChange(e.target.value as SkuFlowRole)}
+      className="bg-slate-100 text-[10px] font-bold text-slate-600 rounded border-none py-1 pl-2 pr-6 outline-none focus:ring-1 focus:ring-brand-500"
+    >
+      {roles.map(r => <option key={r} value={r}>{r.toUpperCase()}</option>)}
+    </select>
+  ) : (
     <div className="flex bg-slate-200 p-1 rounded-md">
       {roles.map(r => (
         <button 
@@ -104,41 +134,91 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
     </div>
   );
 
-  const Summary = () => (
-    <div className="bg-slate-50 p-4 rounded border border-slate-200 grid grid-cols-2 gap-x-6 gap-y-4 text-sm shadow-inner">
-      <div className="space-y-1">
-        <label className="text-[10px] uppercase font-bold text-slate-400">SKU Code</label>
-        <div className="font-mono font-bold text-slate-700">{model.draft.skuCode || '--'}</div>
+  const Summary = () => {
+    if (isMobile) {
+      return (
+        <div className="bg-slate-50 p-3 rounded border border-slate-200 text-sm shadow-inner">
+          <button 
+            onClick={() => setShowSummaryDetails(!showSummaryDetails)}
+            className="w-full flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-wider"
+          >
+            <span>SKU Summary</span>
+            {showSummaryDetails ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+          
+          {(showSummaryDetails || !model.draft.skuCode) ? (
+            <div className="mt-3 space-y-3 animate-in fade-in slide-in-from-top-1">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[9px] uppercase font-bold text-slate-400">SKU Code</label>
+                  <div className="font-mono font-bold text-slate-700 break-all text-xs">{model.draft.skuCode || '--'}</div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] uppercase font-bold text-slate-400">SKU Name</label>
+                  <div className="font-medium text-slate-800 text-xs truncate">{model.draft.skuName || '--'}</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+                <div className="space-y-1">
+                  <label className="text-[9px] uppercase font-bold text-slate-400">Chemistry</label>
+                  <div className="font-medium text-slate-700 text-xs">{model.draft.chemistry || '--'}</div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] uppercase font-bold text-slate-400">Form Factor</label>
+                  <div className="font-medium text-slate-700 text-xs">{model.draft.formFactor || '--'}</div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-1 font-mono font-bold text-slate-700 text-xs">
+              {model.draft.skuCode} <span className="font-normal text-slate-400 ml-2">/ {model.draft.skuName}</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-slate-50 p-4 rounded border border-slate-200 grid grid-cols-2 tablet:grid-cols-1 gap-x-6 gap-y-4 text-sm shadow-inner">
+        <div className="space-y-1">
+          <label className="text-[10px] uppercase font-bold text-slate-400">SKU Code</label>
+          <div className="font-mono font-bold text-slate-700">{model.draft.skuCode || '--'}</div>
+        </div>
+        <div className="space-y-1">
+          <label className="text-[10px] uppercase font-bold text-slate-400">SKU Name</label>
+          <div className="font-medium text-slate-800">{model.draft.skuName || '--'}</div>
+        </div>
+        <div className="space-y-1">
+          <label className="text-[10px] uppercase font-bold text-slate-400">Chemistry</label>
+          <div className="font-medium text-slate-700">{model.draft.chemistry || '--'}</div>
+        </div>
+        <div className="space-y-1">
+          <label className="text-[10px] uppercase font-bold text-slate-400">Form Factor</label>
+          <div className="font-medium text-slate-700">{model.draft.formFactor || '--'}</div>
+        </div>
       </div>
-      <div className="space-y-1">
-        <label className="text-[10px] uppercase font-bold text-slate-400">SKU Name</label>
-        <div className="font-medium text-slate-800">{model.draft.skuName || '--'}</div>
-      </div>
-      <div className="space-y-1">
-        <label className="text-[10px] uppercase font-bold text-slate-400">Chemistry</label>
-        <div className="font-medium text-slate-700">{model.draft.chemistry || '--'}</div>
-      </div>
-      <div className="space-y-1">
-        <label className="text-[10px] uppercase font-bold text-slate-400">Form Factor</label>
-        <div className="font-medium text-slate-700">{model.draft.formFactor || '--'}</div>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <FlowShell 
       title="SKU Flow Wizard (FLOW-001)" 
-      subtitle="Maker-Checker-Approver Lifecycle"
-      rightSlot={RoleSwitcher}
+      subtitle={isMobile ? "Maker-Checker-Approver" : "Maker-Checker-Approver Lifecycle"}
+      rightSlot={(
+        <div className="flex items-center">
+          {DeviceIndicator}
+          {RoleSwitcher}
+        </div>
+      )}
     >
       <div className="h-full flex flex-col">
         <div className="flex-1">
           {model.step === "DRAFT" && (
             <FlowStep 
               stepTitle="Define SKU Specifications" 
-              stepHint="Specify technical parameters for the new battery pack profile."
+              stepHint={isMobile ? "Set technical parameters." : "Specify technical parameters for the new battery pack profile."}
             >
-              <div className="grid grid-cols-2 gap-6">
+              <div className={`grid ${isDesktop ? 'grid-cols-2' : 'grid-cols-1'} gap-6`}>
                 <div className="space-y-2">
                   <label className="block text-xs font-bold text-slate-600 uppercase">SKU Code</label>
                   <input 
@@ -190,7 +270,7 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
                 <label className="block text-xs font-bold text-slate-600 uppercase">Notes / Instructions</label>
                 <textarea 
                   className="w-full border border-slate-300 rounded p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
-                  rows={3}
+                  rows={isMobile ? 2 : 3}
                   value={model.draft.notes}
                   onChange={e => handleUpdateDraft('notes', e.target.value)}
                 />
@@ -201,14 +281,14 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
           {model.step === "REVIEW" && (
             <FlowStep 
               stepTitle="Technical Review (Checker)" 
-              stepHint="Verify that specs align with engineering standards."
+              stepHint={isMobile ? "Verify engineering alignment." : "Verify that specs align with engineering standards."}
             >
               <Summary />
               <div className="space-y-2 mt-6">
                 <label className="block text-xs font-bold text-slate-600 uppercase">Reviewer Comments</label>
                 <textarea 
                   className="w-full border border-slate-300 rounded p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
-                  rows={3}
+                  rows={isMobile ? 2 : 3}
                   placeholder="Mandatory for send-back..."
                   value={model.comment}
                   onChange={e => setModel(m => ({ ...m, comment: e.target.value }))}
@@ -226,7 +306,7 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
           {model.step === "APPROVE" && (
             <FlowStep 
               stepTitle="Final Approval (Approver)" 
-              stepHint="Authorize this SKU for active manufacturing use."
+              stepHint={isMobile ? "Final manufacturing sign-off." : "Authorize this SKU for active manufacturing use."}
             >
               <Summary />
               {model.comment && (
@@ -238,7 +318,7 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
                 <label className="block text-xs font-bold text-slate-600 uppercase">Approval Statement</label>
                 <textarea 
                   className="w-full border border-slate-300 rounded p-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
-                  rows={3}
+                  rows={isMobile ? 2 : 3}
                   placeholder="Final remarks..."
                   value={model.rejectionReason}
                   onChange={e => setModel(m => ({ ...m, rejectionReason: e.target.value }))}
@@ -256,17 +336,17 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
           {model.step === "PUBLISH" && (
             <FlowStep 
               stepTitle="SKU Released" 
-              stepHint="The SKU profile is now active in the manufacturing ledger."
+              stepHint={isMobile ? "Profile is now active." : "The SKU profile is now active in the manufacturing ledger."}
             >
-              <div className="flex flex-col items-center py-8 text-center">
+              <div className="flex flex-col items-center py-4 text-center">
                 <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
                   <ShieldCheck size={32} />
                 </div>
                 <h3 className="text-xl font-bold text-slate-800">Registration Complete</h3>
-                <p className="text-slate-500 max-w-sm mt-2">
+                <p className="text-slate-500 max-w-sm mt-2 text-xs">
                   SKU <strong>{model.draft.skuCode}</strong> has been successfully registered and is ready for S4 Batch Planning.
                 </p>
-                <div className="mt-8 w-full max-w-md">
+                <div className="mt-6 w-full max-w-md">
                    <Summary />
                 </div>
               </div>
@@ -280,23 +360,23 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
               onClick={onExit}
               className="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors"
             >
-              Close Wizard
+              Close
             </button>
           }
           right={
-            <div className="flex items-center gap-3">
+            <div className={`flex ${isMobile ? 'flex-col-reverse w-full' : 'items-center'} gap-3`}>
               {model.step === "DRAFT" && (
                 <>
                   <button 
                     onClick={handleReset}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded border border-transparent transition-all"
+                    className={`flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded border border-transparent transition-all ${isMobile ? 'w-full' : ''}`}
                   >
                     <RotateCcw size={16} /> Reset
                   </button>
                   <button 
                     onClick={handleSubmit}
                     disabled={!isActionAllowed(model.role, model.state, "SUBMIT_FOR_REVIEW") || !model.draft.skuCode}
-                    className="flex items-center gap-2 px-6 py-2 bg-brand-600 text-white rounded font-bold text-sm hover:bg-brand-700 disabled:opacity-50 transition-all shadow-sm"
+                    className={`flex items-center justify-center gap-2 px-6 py-2 bg-brand-600 text-white rounded font-bold text-sm hover:bg-brand-700 disabled:opacity-50 transition-all shadow-sm ${isMobile ? 'w-full' : ''}`}
                   >
                     Submit for Review <Send size={16} />
                   </button>
@@ -308,14 +388,14 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
                   <button 
                     onClick={() => handleReview("SEND_BACK")}
                     disabled={!isActionAllowed(model.role, model.state, "REVIEW_SEND_BACK")}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-red-200 text-red-700 rounded font-bold text-sm hover:bg-red-50 disabled:opacity-50 transition-all"
+                    className={`flex items-center justify-center gap-2 px-4 py-2 bg-white border border-red-200 text-red-700 rounded font-bold text-sm hover:bg-red-50 disabled:opacity-50 transition-all ${isMobile ? 'w-full' : ''}`}
                   >
                     <XCircle size={16} /> Send Back
                   </button>
                   <button 
                     onClick={() => handleReview("FORWARD")}
                     disabled={!isActionAllowed(model.role, model.state, "REVIEW_FORWARD")}
-                    className="flex items-center gap-2 px-6 py-2 bg-brand-600 text-white rounded font-bold text-sm hover:bg-brand-700 disabled:opacity-50 transition-all shadow-sm"
+                    className={`flex items-center justify-center gap-2 px-6 py-2 bg-brand-600 text-white rounded font-bold text-sm hover:bg-brand-700 disabled:opacity-50 transition-all shadow-sm ${isMobile ? 'w-full' : ''}`}
                   >
                     Forward <ChevronRight size={16} />
                   </button>
@@ -327,14 +407,14 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
                   <button 
                     onClick={() => handleApprove("REJECT")}
                     disabled={!isActionAllowed(model.role, model.state, "REJECT")}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-red-200 text-red-700 rounded font-bold text-sm hover:bg-red-50 disabled:opacity-50 transition-all"
+                    className={`flex items-center justify-center gap-2 px-4 py-2 bg-white border border-red-200 text-red-700 rounded font-bold text-sm hover:bg-red-50 disabled:opacity-50 transition-all ${isMobile ? 'w-full' : ''}`}
                   >
                     <XCircle size={16} /> Reject
                   </button>
                   <button 
                     onClick={() => handleApprove("APPROVE")}
                     disabled={!isActionAllowed(model.role, model.state, "APPROVE_TO_ACTIVE")}
-                    className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded font-bold text-sm hover:bg-green-700 disabled:opacity-50 transition-all shadow-sm"
+                    className={`flex items-center justify-center gap-2 px-6 py-2 bg-green-600 text-white rounded font-bold text-sm hover:bg-green-700 disabled:opacity-50 transition-all shadow-sm ${isMobile ? 'w-full' : ''}`}
                   >
                     Approve to Active <CheckCircle2 size={16} />
                   </button>
@@ -344,7 +424,7 @@ export const SkuFlowWizard: React.FC<SkuFlowWizardProps> = ({ onExit }) => {
               {model.step === "PUBLISH" && (
                 <button 
                   onClick={handleReset}
-                  className="flex items-center gap-2 px-6 py-2 bg-brand-600 text-white rounded font-bold text-sm hover:bg-brand-700 transition-all shadow-sm"
+                  className={`flex items-center justify-center gap-2 px-6 py-2 bg-brand-600 text-white rounded font-bold text-sm hover:bg-brand-700 transition-all shadow-sm ${isMobile ? 'w-full' : ''}`}
                 >
                   Start New SKU <PlusIcon size={16} />
                 </button>
