@@ -4,9 +4,11 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S1-FLOW-001-PP-06** | Product Patch | SKU Flow Instance List & Load | **STABLE** | Integrated sim API flow list into S1 screen; added "Resume" support in Wizard. | 2026-01-27 18:30 (IST) |
+| **V34-S1-FLOW-001-PP-05** | Product Patch | Wire S1 SKU Wizard to /api/flows/sku endpoints backed by in-memory store | **STABLE** | Sim API via apiFetch; no global fetch patching. | 2026-01-27 18:00 (IST) |
 | **V34-S1-FLOW-001-PP-04** | Product Patch | Add device-aware layout for S1 SKU Wizard (desktop/tablet/mobile) | **STABLE** | Uses useDeviceLayout(); still local-only; no API wiring. | 2026-01-27 17:15 (IST) |
 | **V34-S1-FLOW-001-PP-03** | Product Patch | Add S1 SKU Flow Step Wizard UI (local-only; no API) | **STABLE** | Wizard hidden by default; existing S1 UI preserved. No API wiring yet. | 2026-01-27 16:45 (IST) |
-| **V34-S1-FLOW-001-FP-02** | Flow Policy | Add RBAC action policy for SKU flow by role + state | **STABLE** | Pure policy only; no UI/API wiring yet. | 2026-01-27 16:15 (IST) |
+| **V34-S1-FLOW-001-FP-02** | Flow Policy | Add RBAC policy mapping for SKU flow actions by role + state | **STABLE** | Pure policy logic; no UI changes. | 2026-01-27 16:15 (IST) |
 | **V34-S1-FLOW-001-BP-01** | Flow Contract | Define S1 SKU flow state machine + API payload contracts (no UI wiring) | **STABLE** | Phase B begins. Contracts only. | 2026-01-27 15:45 (IST) |
 | **V34-FND-BP-10** | Foundation | Add in-memory API store (flows map) resettable on reload | **STABLE** | PLAN: Phase A Step 6 (V34-FND-BP-06). Store introduced; endpoints still static; no UI wiring. | 2026-01-27 15:15 (IST) |
 | **V34-FND-BP-09** | Foundation | Add /api/flows/* static skeleton endpoints (Option-B alignment) | **STABLE** | PLAN: Phase A Step 5 (V34-FND-BP-05). Static JSON only; no UI wiring. | 2026-01-27 14:45 (IST) |
@@ -20,6 +22,3 @@
 | **V34-API-BP-03** | Foundation | Option-B API Harness Scaffolding | **STABLE** | Global fetch patched; flowHandlers initialized | 2026-01-27 11:15 (IST) |
 | **V34-FND-BP-02** | Foundation | Add Flow Contract Types (shared flow + API envelope types) | **STABLE** | Types-only; no runtime change | 2026-01-27 10:45 (IST) |
 | **V34-FND-BP-01** | Foundation | Add Flow Inventory registry (docs only) + bump version to V3.4 | **STABLE** | No UI/runtime change | 2026-01-27 10:20 (IST) |
-
-## V3.1-EXT Archive (Frozen)
-...

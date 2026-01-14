@@ -26,7 +26,9 @@ import {
   Radar,
   ShoppingCart,
   Wand2,
-  X
+  X,
+  RefreshCw,
+  Clock
 } from 'lucide-react';
 import { StageStateBanner } from './StageStateBanner';
 import { PreconditionsPanel } from './PreconditionsPanel';
@@ -35,6 +37,8 @@ import { getMockS1Context, S1Context } from '../stages/s1/s1Contract';
 import { getS1ActionState, S1ActionId } from '../stages/s1/s1Guards';
 import { emitAuditEvent, getAuditEvents, AuditEvent } from '../utils/auditEvents';
 import { SkuFlowWizard } from '../flows/sku/ui/SkuFlowWizard';
+import { apiFetch } from '../services/apiHarness';
+import { SKU_FLOW_ENDPOINTS, type SkuFlowInstance } from '../flows/sku';
 
 // Mock Data Types
 interface SKU {
@@ -110,21 +114,58 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
   const { role } = useContext(UserContext);
   const [selectedSku, setSelectedSku] = useState<SKU>(MOCK_SKUS[0]);
   const [showWizard, setShowWizard] = useState(false);
+  const [resumeInstanceId, setResumeInstanceId] = useState<string | null>(null);
+
+  // V3.4 Simulated API State
+  const [apiFlows, setApiFlows] = useState<SkuFlowInstance[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Local State for S1 Context Simulation
   const [s1Context, setS1Context] = useState<S1Context>(getMockS1Context());
   const [localEvents, setLocalEvents] = useState<AuditEvent[]>([]);
   const [isSimulating, setIsSimulating] = useState(false);
 
-  // Load events on mount
+  const fetchApiFlows = async () => {
+    setIsRefreshing(true);
+    try {
+      const res = await apiFetch(SKU_FLOW_ENDPOINTS.list);
+      const result = await res.json();
+      if (result.ok) {
+        setApiFlows(result.data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch S1 flows:", e);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  // Load events and api flows on mount
   useEffect(() => {
     setLocalEvents(getAuditEvents().filter(e => e.stageId === 'S1'));
+    fetchApiFlows();
   }, []);
 
   // Helper to resolve action state
   const getAction = (actionId: S1ActionId) => getS1ActionState(role, s1Context, actionId);
 
   // Action Handlers
+  const handleStartNewWizard = () => {
+    setResumeInstanceId(null);
+    setShowWizard(true);
+  };
+
+  const handleResumeWizard = (instanceId: string) => {
+    setResumeInstanceId(instanceId);
+    setShowWizard(true);
+  };
+
+  const handleWizardExit = () => {
+    setShowWizard(false);
+    setResumeInstanceId(null);
+    fetchApiFlows();
+  };
+
   const handleCreateSku = () => {
     setIsSimulating(true);
     setTimeout(() => {
@@ -144,8 +185,6 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
     setIsSimulating(true);
     setTimeout(() => {
       const now = new Date().toLocaleString('en-GB', { timeZone: 'Asia/Kolkata' }) + ' IST';
-      // If we are editing, we are likely in DRAFT. If it was APPROVED (though guards prevent this), we would bump revision.
-      // Since guards ensure we are in DRAFT, we just update timestamp.
       setS1Context(prev => ({ ...prev, lastBlueprintUpdate: now }));
       
       const evt = emitAuditEvent({
@@ -200,7 +239,6 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
   const handlePublish = () => {
     setIsSimulating(true);
     setTimeout(() => {
-      // Just an event for now, typically this would lock the version and start a new one
       const evt = emitAuditEvent({
         stageId: 'S1',
         actionId: 'PUBLISH_SKU_BLUEPRINT',
@@ -279,7 +317,7 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
                 ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100' 
                 : 'bg-white border-brand-200 text-brand-600 hover:bg-brand-50'
               }`}
-              onClick={() => setShowWizard(!showWizard)}
+              onClick={showWizard ? handleWizardExit : handleStartNewWizard}
             >
               {showWizard ? <X size={16} /> : <Wand2 size={16} />}
               <span>{showWizard ? 'Exit Wizard' : 'Start SKU Flow Wizard'}</span>
@@ -310,7 +348,7 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
 
       {showWizard ? (
         <div className="flex-1 min-h-0">
-           <SkuFlowWizard onExit={() => setShowWizard(false)} />
+           <SkuFlowWizard instanceId={resumeInstanceId} onExit={handleWizardExit} />
         </div>
       ) : (
         <>
@@ -377,27 +415,80 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
           <div className={`flex-1 grid grid-cols-12 gap-6 min-h-0 ${isSimulating ? 'opacity-70 pointer-events-none' : ''}`}>
             
             {/* Left: Master List */}
-            <div className="col-span-4 bg-white rounded-lg shadow-sm border border-industrial-border flex flex-col overflow-hidden">
-              <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold text-slate-700">Battery Pack Models</h3>
-                  <span className="text-xs text-slate-400">{s1Context.totalSkus} Configurations Found</span>
+            <div className="col-span-4 flex flex-col gap-4 overflow-hidden">
+              
+              {/* V3.4 In-Progress Flows Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-industrial-border flex flex-col h-1/2 overflow-hidden">
+                <div className="p-4 border-b border-slate-100 bg-brand-50/30 flex justify-between items-center">
+                  <div>
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                      <Wand2 size={16} className="text-brand-600" />
+                      Active SKU Flows
+                    </h3>
+                    <span className="text-[10px] text-slate-400 font-bold uppercase">Simulated API (In-Memory)</span>
+                  </div>
+                  <button 
+                    onClick={fetchApiFlows}
+                    className={`p-1.5 rounded hover:bg-slate-100 text-slate-400 transition-all ${isRefreshing ? 'animate-spin' : ''}`}
+                    title="Refresh Flow List"
+                  >
+                    <RefreshCw size={14} />
+                  </button>
                 </div>
-                <div className="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-mono">
-                  Updated: {s1Context.lastBlueprintUpdate.split(' ')[0]}
+                <div className="overflow-y-auto flex-1 p-2 space-y-2 custom-scrollbar">
+                  {apiFlows.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-8 px-4 text-center opacity-60">
+                      <Clock className="text-slate-300 mb-2" size={24} />
+                      <p className="text-xs text-slate-500 font-medium">No active flows in sim storage.</p>
+                      <button 
+                        onClick={handleStartNewWizard}
+                        className="text-[10px] text-brand-600 font-bold uppercase mt-2 hover:underline"
+                      >
+                        Create First SKU Flow
+                      </button>
+                    </div>
+                  ) : (
+                    apiFlows.map(flow => (
+                      <div 
+                        key={flow.instanceId}
+                        onClick={() => handleResumeWizard(flow.instanceId)}
+                        className="p-3 bg-white border border-slate-200 rounded-md hover:border-brand-300 hover:shadow-sm cursor-pointer transition-all group"
+                      >
+                        <div className="flex justify-between items-start mb-1">
+                          <span className="font-bold text-slate-800 text-xs font-mono">{flow.instanceId}</span>
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
+                            flow.state === 'Active' ? 'bg-green-100 text-green-700' : 
+                            flow.state === 'Review' ? 'bg-blue-100 text-blue-700' :
+                            flow.state === 'Rejected' ? 'bg-red-100 text-red-700' :
+                            'bg-slate-100 text-slate-600'
+                          }`}>
+                            {flow.state}
+                          </span>
+                        </div>
+                        <div className="text-xs font-bold text-slate-700 truncate">{flow.draft.skuCode || 'Unnamed Flow'}</div>
+                        <div className="flex justify-between items-center mt-2">
+                           <span className="text-[9px] text-slate-400 font-mono italic">Upd: {new Date(flow.updatedAt).toLocaleTimeString()}</span>
+                           <span className="text-[9px] text-brand-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">RESUME <ArrowRight size={10} /></span>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
-              <div className="overflow-y-auto flex-1 p-2 space-y-2">
-                {MOCK_SKUS.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
-                    <div className="bg-slate-50 p-3 rounded-full mb-3">
-                      <Box className="text-slate-300" size={20} />
-                    </div>
-                    <h3 className="text-slate-700 font-medium text-sm mb-1">Nothing to display yet</h3>
-                    <p className="text-slate-500 text-xs">Records will appear here once created or synced.</p>
+
+              {/* Legacy Master List */}
+              <div className="bg-white rounded-lg shadow-sm border border-industrial-border flex flex-col h-1/2 overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
+                <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                  <div>
+                    <h3 className="font-semibold text-slate-700">Static Blueprint Catalog</h3>
+                    <span className="text-[10px] text-slate-400 uppercase font-bold">V3.3 Baseline Records</span>
                   </div>
-                ) : (
-                  MOCK_SKUS.map((sku) => (
+                  <div className="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-mono">
+                    {MOCK_SKUS.length} Total
+                  </div>
+                </div>
+                <div className="overflow-y-auto flex-1 p-2 space-y-2 custom-scrollbar">
+                  {MOCK_SKUS.map((sku) => (
                     <div 
                       key={sku.id}
                       onClick={() => setSelectedSku(sku)}
@@ -423,9 +514,10 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
                         <span className="bg-slate-100 px-1 rounded">{sku.voltage}</span>
                       </div>
                     </div>
-                  ))
-                )}
+                  ))}
+                </div>
               </div>
+
             </div>
 
             {/* Right: Detail View / Blueprint */}
@@ -491,7 +583,7 @@ export const SKUBlueprint: React.FC<SKUBlueprintProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-8">
+              <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
                 
                 {/* 1. Electrical & Chemistry */}
                 <section>

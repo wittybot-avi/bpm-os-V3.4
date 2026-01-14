@@ -4,17 +4,25 @@
  * @foundation V34-FND-BP-04
  * @foundation V34-FND-BP-06
  * @foundation V34-FND-BP-09
+ * @foundation V34-S1-FLOW-001-PP-05
  */
 
 import { route, RouteDef } from "./apiRouter";
 import { getFlowRegistry } from "./handlers/flowRegistryHandler";
 import { 
-  getSkuFlowStatic, 
   getBatchFlowStatic, 
   getInboundFlowStatic, 
   getFinalQaFlowStatic, 
   getDispatchFlowStatic 
 } from "./handlers/flowsStaticSkeleton";
+import { 
+  createSkuFlow, 
+  submitSkuForReview, 
+  reviewSku, 
+  approveSku, 
+  getSkuFlow, 
+  listSkuFlows 
+} from "./handlers/skuFlowHandlers";
 
 export const SIM_API_ROUTES: RouteDef[] = [
   /**
@@ -40,9 +48,18 @@ export const SIM_API_ROUTES: RouteDef[] = [
   route("GET", "EXACT", "/api/flows/registry", getFlowRegistry),
 
   /**
+   * SKU Flow (FLOW-001) - Live Simulated Handlers
+   */
+  route("POST", "EXACT", "/api/flows/sku/create", createSkuFlow),
+  route("POST", "EXACT", "/api/flows/sku/submit", submitSkuForReview),
+  route("POST", "EXACT", "/api/flows/sku/review", reviewSku),
+  route("POST", "EXACT", "/api/flows/sku/approve", approveSku),
+  route("GET", "EXACT", "/api/flows/sku/get", getSkuFlow),
+  route("GET", "EXACT", "/api/flows/sku/list", listSkuFlows),
+
+  /**
    * Static Flow Skeletons (V34 Phase A)
    */
-  route("GET", "EXACT", "/api/flows/sku", getSkuFlowStatic),
   route("GET", "EXACT", "/api/flows/batch", getBatchFlowStatic),
   route("GET", "EXACT", "/api/flows/inbound", getInboundFlowStatic),
   route("GET", "EXACT", "/api/flows/final-qa", getFinalQaFlowStatic),
