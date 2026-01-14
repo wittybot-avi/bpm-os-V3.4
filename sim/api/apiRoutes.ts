@@ -6,12 +6,12 @@
  * @foundation V34-FND-BP-09
  * @foundation V34-S1-FLOW-001-PP-05
  * @foundation V34-S2-FLOW-002-PP-03
+ * @foundation V34-S3-FLOW-003-PP-04
  */
 
 import { route, RouteDef } from "./apiRouter";
 import { getFlowRegistry } from "./handlers/flowRegistryHandler";
 import { 
-  getInboundFlowStatic, 
   getFinalQaFlowStatic, 
   getDispatchFlowStatic 
 } from "./handlers/flowsStaticSkeleton";
@@ -32,6 +32,16 @@ import {
   getBatchFlow,
   listBatchFlows
 } from "./handlers/batchFlowHandlers";
+import {
+  createInboundFlow,
+  serializeInbound,
+  submitInboundQc,
+  completeInboundQc,
+  releaseInbound,
+  scrapInbound,
+  getInboundFlow,
+  listInboundFlows
+} from "./handlers/inboundFlowHandlers";
 
 export const SIM_API_ROUTES: RouteDef[] = [
   /**
@@ -78,9 +88,20 @@ export const SIM_API_ROUTES: RouteDef[] = [
   route("GET", "EXACT", "/api/flows/batch/list", listBatchFlows),
 
   /**
+   * Inbound Flow (FLOW-003) - Live Simulated Handlers
+   */
+  route("POST", "EXACT", "/api/flows/inbound/create", createInboundFlow),
+  route("POST", "EXACT", "/api/flows/inbound/serialize", serializeInbound),
+  route("POST", "EXACT", "/api/flows/inbound/submit-qc", submitInboundQc),
+  route("POST", "EXACT", "/api/flows/inbound/complete-qc", completeInboundQc),
+  route("POST", "EXACT", "/api/flows/inbound/release", releaseInbound),
+  route("POST", "EXACT", "/api/flows/inbound/scrap", scrapInbound),
+  route("GET", "EXACT", "/api/flows/inbound/get", getInboundFlow),
+  route("GET", "EXACT", "/api/flows/inbound/list", listInboundFlows),
+
+  /**
    * Static Flow Skeletons (V34 Phase A)
    */
-  route("GET", "EXACT", "/api/flows/inbound", getInboundFlowStatic),
   route("GET", "EXACT", "/api/flows/final-qa", getFinalQaFlowStatic),
   route("GET", "EXACT", "/api/flows/dispatch", getDispatchFlowStatic),
 ];

@@ -4,4 +4,4 @@
 export const APP_NAME = 'BPM-OS';
 export const APP_VERSION = 'V3.4';
 export const BRANCH_ID = 'V3.4';
-export const PATCH_ID = 'V34-S3-FLOW-003-PP-02';
+export const PATCH_ID = 'V34-S3-FLOW-003-PP-04';
