@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S9-FLOW-004-BP-01** | Build-Phase | Define Final QA flow states, checklist model, and API contracts | **STABLE** | Build-phase only; no UI wiring for FLOW-004. | 2026-01-27 23:30 (IST) |
 | **V34-S3-FLOW-003-DOC-05** | Documentation | Document inbound + QC flow for ops and backend teams | **STABLE** | Technical spec for FLOW-003 including state model and API. | 2026-01-27 23:00 (IST) |
 | **V34-S3-FLOW-003-PP-04** | Product Patch | Wire inbound wizard to /api/flows/inbound endpoints | **STABLE** | Integrated sim API for full material receipt lifecycle. | 2026-01-27 22:00 (IST) |
 | **V34-S3-FLOW-003-PP-03** | Product Patch | Make inbound wizard tablet-friendly (warehouse usage) | **STABLE** | Implemented responsive layouts and touch optimizations for FLOW-003. | 2026-01-27 22:30 (IST) |
