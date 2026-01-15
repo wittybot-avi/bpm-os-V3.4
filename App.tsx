@@ -18,6 +18,8 @@ import { PackReview } from './components/PackReview';
 // Updated S9 Wrapper
 import { S9FinalQaScreen } from './screens/s9/S9FinalQaScreen';
 import { BMSProvisioning } from './components/BMSProvisioning';
+// Updated S11 Wrapper
+import { S11DispatchScreen } from './screens/s11/S11DispatchScreen';
 import { FinishedGoods } from './components/FinishedGoods';
 import { PackagingAggregation } from './components/PackagingAggregation';
 import { DispatchAuthorization } from './components/DispatchAuthorization';
@@ -82,7 +84,7 @@ const App: React.FC = () => {
           {currentView === 'pack_review' && <PackReview onNavigate={setCurrentView} />}
           {currentView === 'battery_registry' && <S9FinalQaScreen onNavigate={setCurrentView} />}
           {currentView === 'bms_provisioning' && <BMSProvisioning onNavigate={setCurrentView} />}
-          {currentView === 'finished_goods' && <FinishedGoods onNavigate={setCurrentView} />}
+          {currentView === 'finished_goods' && <S11DispatchScreen onNavigate={setCurrentView} />}
           {currentView === 'packaging_aggregation' && <PackagingAggregation />}
           {currentView === 'dispatch_authorization' && <DispatchAuthorization />}
           {currentView === 'dispatch_execution' && <DispatchExecution />}
