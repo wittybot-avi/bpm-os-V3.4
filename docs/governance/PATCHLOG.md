@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-STAB-BP-02** | Stabilization | Add Wizard UX Guardrail helpers | **STABLE** | Pure helper logic for optional adoption by MES flows to ensure UI consistency. | 2026-01-28 03:30 (IST) |
 | **V34-STAB-BP-01** | Stabilization | Add Regression Smoke Panel | **STABLE** | Read-only diagnostic panel to verify API wiring across all MES flows. | 2026-01-28 03:00 (IST) |
 | **V34-MES-PP-11** | Product Patch | Standardize Flow Instance Lists across MES Screens | **STABLE** | Integrated FlowInstanceList into S3, S4, S9, and S11 screen wrappers for Pilot consistency. | 2026-01-28 02:30 (IST) |
 | **V34-S11-FLOW-005-DOC-04** | Documentation | Document Dispatch & Custody Handover flow | **STABLE** | Detailed technical spec for FLOW-005. | 2026-01-28 02:00 (IST) |
@@ -24,7 +25,7 @@
 | **V34-S2-FLOW-002-PP-03** | Product Patch | Wire Batch Wizard to /api/flows/batch endpoints | **STABLE** | Integrated sim API with in-memory store for Batch lifecycle. | 2026-01-27 20:15 (IST) |
 | **V34-S2-FLOW-002-PP-02** | Product Patch | Add Batch Flow Wizard UI using FlowShell | **STABLE** | Local state only. No API yet. Wizard hidden by default. | 2026-01-27 19:45 (IST) |
 | **V34-S2-FLOW-002-BP-01** | Build-Phase | Define Batch flow states, data model, and API payload contracts | **STABLE** | Contracts only; no UI wiring or handlers. | 2026-01-27 19:15 (IST) |
-| **V34-S1-FLOW-001-DOC-06** | Documentation | Document FLOW-001 (S1 SKU) — states, RBAC, wizard, API endpoints, handover notes | **STABLE** | No runtime change. Completes Flow-001 pilot. | 2026-01-27 18:45 (IST) |
+| **V34-S1-FLOW-001-DOC-06** | Documentation | Document FLOW-001 (S1 SKU) — states, RBAC, wizard, API endpoints, handover meta | **STABLE** | No runtime change. Completes Flow-001 pilot. | 2026-01-27 18:45 (IST) |
 | **V34-S1-FLOW-001-PP-06** | Product Patch | SKU Flow Instance List & Load | **STABLE** | Integrated sim API flow list into S1 screen; added "Resume" support in Wizard. | 2026-01-27 18:30 (IST) |
 | **V34-S1-FLOW-001-PP-05** | Product Patch | Wire S1 SKU Wizard to /api/flows/sku endpoints backed by in-memory store | **STABLE** | Sim API via apiFetch; no global fetch patching. | 2026-01-27 18:00 (IST) |
 | **V34-S1-FLOW-001-PP-04** | Product Patch | Add device-aware layout for S1 SKU Wizard (desktop/tablet/mobile) | **STABLE** | Uses useDeviceLayout(); still local-only; no API wiring. | 2026-01-27 17:15 (IST) |
