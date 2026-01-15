@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-STAB-BP-03** | Stabilization | Add Form Validation Helper | **STABLE** | Scoped utility for field validation within MES wizards. No component adoption yet. | 2026-01-28 04:00 (IST) |
 | **V34-STAB-BP-02** | Stabilization | Add Wizard UX Guardrail helpers | **STABLE** | Pure helper logic for optional adoption by MES flows to ensure UI consistency. | 2026-01-28 03:30 (IST) |
 | **V34-STAB-BP-01** | Stabilization | Add Regression Smoke Panel | **STABLE** | Read-only diagnostic panel to verify API wiring across all MES flows. | 2026-01-28 03:00 (IST) |
 | **V34-MES-PP-11** | Product Patch | Standardize Flow Instance Lists across MES Screens | **STABLE** | Integrated FlowInstanceList into S3, S4, S9, and S11 screen wrappers for Pilot consistency. | 2026-01-28 02:30 (IST) |
