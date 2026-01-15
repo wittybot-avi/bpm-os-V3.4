@@ -70,7 +70,8 @@ export type NavView =
   | 'system_inventory'
   | 'production_line'
   | 'system_logs'
-  | 'system_reports';
+  | 'system_reports'
+  | 'debug_smoke'; // Added for stabilization diagnostics
 
 // Export shared flow contracts
 export * from './types/flowContracts';

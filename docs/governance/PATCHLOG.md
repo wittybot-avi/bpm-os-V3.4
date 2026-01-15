@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-STAB-BP-01** | Stabilization | Add Regression Smoke Panel | **STABLE** | Read-only diagnostic panel to verify API wiring across all MES flows. | 2026-01-28 03:00 (IST) |
 | **V34-MES-PP-11** | Product Patch | Standardize Flow Instance Lists across MES Screens | **STABLE** | Integrated FlowInstanceList into S3, S4, S9, and S11 screen wrappers for Pilot consistency. | 2026-01-28 02:30 (IST) |
 | **V34-S11-FLOW-005-DOC-04** | Documentation | Document Dispatch & Custody Handover flow | **STABLE** | Detailed technical spec for FLOW-005. | 2026-01-28 02:00 (IST) |
 | **V34-S11-FLOW-005-PP-03** | Product Patch | Wire Dispatch wizard to /api/flows/dispatch endpoints | **STABLE** | Integrated simulated API with in-memory store for consignment lifecycle. | 2026-01-28 01:30 (IST) |

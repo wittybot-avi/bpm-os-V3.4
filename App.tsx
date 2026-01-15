@@ -33,6 +33,8 @@ import { SystemInventory } from './components/SystemInventory';
 import { ProductionLine } from './components/ProductionLine';
 import { SystemLogs } from './components/SystemLogs';
 import { SystemReports } from './components/SystemReports';
+// V34 Diagnostics
+import { RegressionSmokePanel } from './screens/debug';
 import { UserRole, UserContextType, UserContext, NavView } from './types';
 import { canAccess } from './utils/rbac';
 
@@ -97,6 +99,9 @@ const App: React.FC = () => {
           {currentView === 'production_line' && <ProductionLine />}
           {currentView === 'system_logs' && <SystemLogs onNavigate={setCurrentView} />}
           {currentView === 'system_reports' && <SystemReports onNavigate={setCurrentView} />}
+          
+          {/* Debug Views */}
+          {currentView === 'debug_smoke' && <RegressionSmokePanel onNavigate={setCurrentView} />}
         </Layout>
       </UserContext.Provider>
     </ErrorBoundary>
