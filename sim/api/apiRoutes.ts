@@ -8,13 +8,11 @@
  * @foundation V34-S2-FLOW-002-PP-03
  * @foundation V34-S3-FLOW-003-PP-04
  * @foundation V34-S9-FLOW-004-PP-04
+ * @foundation V34-S11-FLOW-005-PP-03
  */
 
 import { route, RouteDef } from "./apiRouter";
 import { getFlowRegistry } from "./handlers/flowRegistryHandler";
-import { 
-  getDispatchFlowStatic 
-} from "./handlers/flowsStaticSkeleton";
 import { 
   createSkuFlow, 
   submitSkuForReview, 
@@ -51,6 +49,16 @@ import {
   getFinalQa,
   listFinalQa
 } from "./handlers/finalQaFlowHandlers";
+import {
+  createDispatch,
+  approveDispatch,
+  dispatchShipment,
+  recordDelivery,
+  closeDispatch,
+  cancelDispatch,
+  getDispatch,
+  listDispatch
+} from "./handlers/dispatchFlowHandlers";
 
 export const SIM_API_ROUTES: RouteDef[] = [
   /**
@@ -120,7 +128,14 @@ export const SIM_API_ROUTES: RouteDef[] = [
   route("GET", "EXACT", "/api/flows/final-qa/list", listFinalQa),
 
   /**
-   * Static Flow Skeletons (V34 Phase A)
+   * Dispatch Flow (FLOW-005) - Live Simulated Handlers
    */
-  route("GET", "EXACT", "/api/flows/dispatch", getDispatchFlowStatic),
+  route("POST", "EXACT", "/api/flows/dispatch/create", createDispatch),
+  route("POST", "EXACT", "/api/flows/dispatch/approve", approveDispatch),
+  route("POST", "EXACT", "/api/flows/dispatch/dispatch", dispatchShipment),
+  route("POST", "EXACT", "/api/flows/dispatch/deliver", recordDelivery),
+  route("POST", "EXACT", "/api/flows/dispatch/close", closeDispatch),
+  route("POST", "EXACT", "/api/flows/dispatch/cancel", cancelDispatch),
+  route("GET", "EXACT", "/api/flows/dispatch/get", getDispatch),
+  route("GET", "EXACT", "/api/flows/dispatch/list", listDispatch),
 ];

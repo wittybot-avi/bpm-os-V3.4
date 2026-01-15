@@ -4,6 +4,7 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-S11-FLOW-005-PP-03** | Product Patch | Wire Dispatch wizard to /api/flows/dispatch endpoints | **STABLE** | Integrated simulated API with in-memory store for consignment lifecycle. | 2026-01-28 01:30 (IST) |
 | **V34-S11-FLOW-005-PP-02** | Product Patch | Add Dispatch wizard UI using FlowShell | **STABLE** | Local-only wizard for Dispatch & Custody Handover. | 2026-01-28 01:15 (IST) |
 | **V34-S11-FLOW-005-BP-01** | Build-Phase | Define Dispatch flow states, consignment model, and API contracts | **STABLE** | Build-phase only; no UI wiring for FLOW-005. | 2026-01-28 01:00 (IST) |
 | **V34-S9-FLOW-004-DOC-05** | Documentation | Document Final QA flow for backend + ops | **STABLE** | Detailed technical spec for FLOW-004. | 2026-01-28 00:45 (IST) |
