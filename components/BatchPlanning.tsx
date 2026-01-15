@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { UserContext, UserRole, NavView } from '../types';
+import { UserContext, UserRole, NavView, AnyFlowInstance } from '../types';
 import { 
   ShieldAlert, 
   CalendarClock, 
@@ -13,12 +13,16 @@ import {
   ArrowRight,
   Radar,
   Wand2,
-  X
+  X,
+  RefreshCw
 } from 'lucide-react';
 import { StageStateBanner } from './StageStateBanner';
 import { PreconditionsPanel } from './PreconditionsPanel';
 import { emitAuditEvent, getAuditEvents, AuditEvent } from '../utils/auditEvents';
 import { BatchFlowWizard } from '../flows/batch/ui/BatchFlowWizard';
+import { FlowInstanceList } from './flow';
+import { apiFetch } from '../services/apiHarness';
+import { BATCH_FLOW_ENDPOINTS } from '../flows/batch';
 
 // Mock Data Types
 interface BatchRecord {
@@ -44,14 +48,44 @@ interface BatchPlanningProps {
 export const BatchPlanning: React.FC<BatchPlanningProps> = ({ onNavigate }) => {
   const { role } = useContext(UserContext);
   const [showWizard, setShowWizard] = useState(false);
+  const [activeInstanceId, setActiveInstanceId] = useState<string | null>(null);
+  const [apiFlows, setApiFlows] = useState<AnyFlowInstance[]>([]);
+  const [isLoadingFlows, setIsLoadingFlows] = useState(false);
   const [localEvents, setLocalEvents] = useState<AuditEvent[]>([]);
+
+  const fetchFlows = async () => {
+    setIsLoadingFlows(true);
+    try {
+      const res = await apiFetch(BATCH_FLOW_ENDPOINTS.list);
+      const result = await res.json();
+      if (result.ok) setApiFlows(result.data);
+    } catch (e) {
+      console.error("S4: Failed to fetch batch flows", e);
+    } finally {
+      setIsLoadingFlows(false);
+    }
+  };
 
   useEffect(() => {
     setLocalEvents(getAuditEvents().filter(e => e.stageId === 'S4'));
+    fetchFlows();
   }, []);
 
-  const handleStartWizard = () => setShowWizard(true);
-  const handleExitWizard = () => setShowWizard(false);
+  const handleStartNew = () => {
+    setActiveInstanceId(null);
+    setShowWizard(true);
+  };
+
+  const handleResume = (id: string) => {
+    setActiveInstanceId(id);
+    setShowWizard(true);
+  };
+
+  const handleExitWizard = () => {
+    setShowWizard(false);
+    setActiveInstanceId(null);
+    fetchFlows();
+  };
 
   const hasAccess = role === UserRole.SYSTEM_ADMIN || role === UserRole.PLANNER || role === UserRole.SUPERVISOR || role === UserRole.MANAGEMENT;
 
@@ -86,7 +120,7 @@ export const BatchPlanning: React.FC<BatchPlanningProps> = ({ onNavigate }) => {
                 ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100' 
                 : 'bg-white border-brand-200 text-brand-600 hover:bg-brand-50'
               }`}
-              onClick={showWizard ? handleExitWizard : handleStartWizard}
+              onClick={showWizard ? handleExitWizard : handleStartNew}
             >
               {showWizard ? <X size={16} /> : <Wand2 size={16} />}
               <span>{showWizard ? 'Exit Wizard' : 'Start Batch Flow Wizard'}</span>
@@ -94,6 +128,7 @@ export const BatchPlanning: React.FC<BatchPlanningProps> = ({ onNavigate }) => {
             <button 
               className="bg-brand-600 text-white px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 hover:bg-brand-700 disabled:opacity-50"
               disabled={showWizard}
+              onClick={handleStartNew}
             >
               <Plus size={16} />
               <span>Create Plan</span>
@@ -104,7 +139,7 @@ export const BatchPlanning: React.FC<BatchPlanningProps> = ({ onNavigate }) => {
 
       {showWizard ? (
         <div className="flex-1 min-h-0">
-          <BatchFlowWizard onExit={handleExitWizard} />
+          <BatchFlowWizard instanceId={activeInstanceId} onExit={handleExitWizard} />
         </div>
       ) : (
         <>
@@ -130,15 +165,30 @@ export const BatchPlanning: React.FC<BatchPlanningProps> = ({ onNavigate }) => {
           )}
 
           <div className="flex-1 grid grid-cols-12 gap-6 min-h-0">
-             <div className="col-span-12 bg-white rounded-lg shadow-sm border border-industrial-border overflow-hidden flex flex-col">
+             {/* Left: Active Batch Flows List */}
+             <div className="col-span-3 h-full overflow-hidden">
+                <FlowInstanceList 
+                   title="Active Batches"
+                   flowId="FLOW-002"
+                   instances={apiFlows}
+                   isLoading={isLoadingFlows}
+                   onRefresh={fetchFlows}
+                   onSelect={handleResume}
+                   onStartNew={handleStartNew}
+                   emptyMessage="No pending production batches."
+                />
+             </div>
+
+             {/* Right: Existing Schedule Table */}
+             <div className="col-span-9 bg-white rounded-lg shadow-sm border border-industrial-border overflow-hidden flex flex-col">
                 <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
                    <h3 className="font-bold text-slate-700 flex items-center gap-2">
                       <ClipboardList size={18} />
-                      Production Schedule
+                      Production Schedule (Baseline)
                    </h3>
                    <div className="flex items-center gap-2 text-xs text-slate-400">
                       <Database size={14} />
-                      <span>S4 Snapshot</span>
+                      <span>ERP Read-Only Snapshot</span>
                    </div>
                 </div>
                 <div className="overflow-x-auto flex-1">

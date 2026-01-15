@@ -1,13 +1,17 @@
 /**
  * S3 Inbound Receipt Screen
- * Updated for FLOW-003 MES Pilot.
+ * Updated for FLOW-003 MES Pilot with Instance List.
+ * @foundation V34-MES-PP-11
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { InboundReceipt } from '../../components/InboundReceipt';
 import { InboundFlowWizard } from '../../flows/inbound/ui/InboundFlowWizard';
+import { FlowInstanceList } from '../../components/flow';
 import { Wand2, X } from 'lucide-react';
-import { NavView } from '../../types';
+import { NavView, AnyFlowInstance } from '../../types';
+import { apiFetch } from '../../services/apiHarness';
+import { INBOUND_FLOW_ENDPOINTS } from '../../flows/inbound';
 
 interface S3InboundScreenProps {
   onNavigate?: (view: NavView) => void;
@@ -15,12 +19,48 @@ interface S3InboundScreenProps {
 
 export const S3InboundScreen: React.FC<S3InboundScreenProps> = (props) => {
   const [showWizard, setShowWizard] = useState(false);
+  const [activeInstanceId, setActiveInstanceId] = useState<string | null>(null);
+  const [apiFlows, setApiFlows] = useState<AnyFlowInstance[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchFlows = async () => {
+    setIsLoading(true);
+    try {
+      const res = await apiFetch(INBOUND_FLOW_ENDPOINTS.list);
+      const result = await res.json();
+      if (result.ok) setApiFlows(result.data);
+    } catch (e) {
+      console.error("S3: Failed to fetch flows", e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchFlows();
+  }, []);
+
+  const handleStartNew = () => {
+    setActiveInstanceId(null);
+    setShowWizard(true);
+  };
+
+  const handleResume = (id: string) => {
+    setActiveInstanceId(id);
+    setShowWizard(true);
+  };
+
+  const handleExit = () => {
+    setShowWizard(false);
+    setActiveInstanceId(null);
+    fetchFlows();
+  };
 
   return (
     <div className="h-full flex flex-col space-y-4">
       <div className="flex justify-end gap-2 shrink-0">
         <button 
-          onClick={() => setShowWizard(!showWizard)}
+          onClick={showWizard ? handleExit : handleStartNew}
           className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold border transition-all ${
             showWizard 
               ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100' 
@@ -28,15 +68,31 @@ export const S3InboundScreen: React.FC<S3InboundScreenProps> = (props) => {
           }`}
         >
           {showWizard ? <X size={16} /> : <Wand2 size={16} />}
-          {showWizard ? 'Exit Wizard' : 'Start Inbound Wizard'}
+          {showWizard ? 'Exit Wizard' : 'Start Inbound Flow'}
         </button>
       </div>
 
       <div className="flex-1 min-h-0">
         {showWizard ? (
-          <InboundFlowWizard onExit={() => setShowWizard(false)} />
+          <InboundFlowWizard instanceId={activeInstanceId} onExit={handleExit} />
         ) : (
-          <InboundReceipt {...props} />
+          <div className="grid grid-cols-12 gap-6 h-full">
+            <div className="col-span-3 h-full overflow-hidden">
+               <FlowInstanceList 
+                 title="Active Receipts"
+                 flowId="FLOW-003"
+                 instances={apiFlows}
+                 isLoading={isLoading}
+                 onRefresh={fetchFlows}
+                 onSelect={handleResume}
+                 onStartNew={handleStartNew}
+                 emptyMessage="No pending inbound receipts."
+               />
+            </div>
+            <div className="col-span-9 h-full overflow-hidden">
+               <InboundReceipt {...props} />
+            </div>
+          </div>
         )}
       </div>
     </div>

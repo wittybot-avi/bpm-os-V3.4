@@ -6,3 +6,4 @@
 export * from "./FlowShell";
 export * from "./FlowStep";
 export * from "./FlowFooter";
+export * from "./FlowInstanceList";

@@ -4,6 +4,8 @@
 
 | Patch ID | Patch Type | Intent | Status | Notes | Date |
 |:---|:---|:---|:---|:---|:---|
+| **V34-MES-PP-11** | Product Patch | Standardize Flow Instance Lists across MES Screens | **STABLE** | Integrated FlowInstanceList into S3, S4, S9, and S11 screen wrappers for Pilot consistency. | 2026-01-28 02:30 (IST) |
+| **V34-S11-FLOW-005-DOC-04** | Documentation | Document Dispatch & Custody Handover flow | **STABLE** | Detailed technical spec for FLOW-005. | 2026-01-28 02:00 (IST) |
 | **V34-S11-FLOW-005-PP-03** | Product Patch | Wire Dispatch wizard to /api/flows/dispatch endpoints | **STABLE** | Integrated simulated API with in-memory store for consignment lifecycle. | 2026-01-28 01:30 (IST) |
 | **V34-S11-FLOW-005-PP-02** | Product Patch | Add Dispatch wizard UI using FlowShell | **STABLE** | Local-only wizard for Dispatch & Custody Handover. | 2026-01-28 01:15 (IST) |
 | **V34-S11-FLOW-005-BP-01** | Build-Phase | Define Dispatch flow states, consignment model, and API contracts | **STABLE** | Build-phase only; no UI wiring for FLOW-005. | 2026-01-28 01:00 (IST) |
